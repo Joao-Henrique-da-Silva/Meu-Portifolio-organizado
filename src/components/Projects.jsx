@@ -42,7 +42,7 @@ export function Projects() {
 
   if (loading) {
     return (
-      <section id="projetos" className={`py-16 ${sectionBg} min-h-100 flex items-center justify-center transition-colors duration-300`}>
+      <section id="projetos" aria-labelledby="projects-title" className={`py-16 ${sectionBg} min-h-100 flex items-center justify-center transition-colors duration-300`}>
         <div className="text-center">
           <div className="animate-spin text-4xl text-secondary dark:text-dark-secondary">🌀</div>
           <p className="mt-4 text-primary dark:text-dark-primary font-medium">Carregando projetos...</p>
@@ -53,7 +53,7 @@ export function Projects() {
 
   if (error) {
     return (
-      <section id="projetos" className={`py-16 ${sectionBg} transition-colors duration-300`}>
+      <section id="projetos" aria-labelledby="projects-title" className={`py-16 ${sectionBg} transition-colors duration-300`}>
         <div className="max-w-6xl mx-auto px-6 text-center text-red-600 dark:text-red-400">
           <p>Erro ao carregar projetos: {error}</p>
         </div>
@@ -62,7 +62,7 @@ export function Projects() {
   }
 
   return (
-    <section id="projetos" className={`py-16 ${sectionBg} transition-colors duration-300`}>
+    <section id="projetos" aria-labelledby="projects-title" className={`py-16 ${sectionBg} transition-colors duration-300`}>
       <div className="max-w-6xl mx-auto px-6">
         <h2 className="text-3xl font-bold text-primary dark:text-dark-primary text-center mb-10 relative">
           Meus Projetos no GitHub
@@ -74,6 +74,7 @@ export function Projects() {
           <input
             type="text"
             placeholder="🔍 Buscar por nome..."
+            aria-label="Buscar projetos por nome"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className={`w-full sm:w-64 px-4 py-2.5 rounded-xl border ${inputBorder} 
@@ -89,6 +90,7 @@ export function Projects() {
                        focus:outline-none focus:ring-2 ${inputRing}
                        ${inputBg} ${inputText}
                        transition-all duration-300 cursor-pointer`}
+            aria-label="Filtrar projetos por linguagem"
           >
             {languages.map((lang) => (
               <option key={lang} value={lang}>

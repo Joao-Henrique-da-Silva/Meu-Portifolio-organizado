@@ -1,5 +1,4 @@
-import { FaGithub, FaGlobe } from 'react-icons/fa';
-import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaCode } from 'react-icons/fa';
+import { FaGithub, FaGlobe, FaHtml5, FaCss3Alt, FaJs, FaReact, FaCode, FaArrowRight } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 
 export function ProjectCard({ name, description, language, html_url, homepage, className = '' }) {
@@ -9,20 +8,24 @@ export function ProjectCard({ name, description, language, html_url, homepage, c
     const observer = new MutationObserver(() => {
       setIsDark(document.documentElement.classList.contains('dark'));
     });
-    
-    observer.observe(document.documentElement, { 
-      attributes: true, 
-      attributeFilter: ['class'] 
-    });
-    
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
     setIsDark(document.documentElement.classList.contains('dark'));
-    
     return () => observer.disconnect();
   }, []);
 
   const isExternal = !!homepage && homepage !== html_url;
 
-  // Cores dinâmicas baseadas no tema
+  // Mapeamento de ícones por linguagem (mantendo as cores originais)
+  const iconMap = {
+    HTML: <FaHtml5 className="text-2xl text-orange-600 dark:text-orange-400" aria-hidden="true" />,
+    CSS:  <FaCss3Alt className="text-2xl text-blue-600 dark:text-blue-400" aria-hidden="true" />,
+    JavaScript: <FaJs className="text-2xl text-yellow-500 dark:text-yellow-300" aria-hidden="true" />,
+    TypeScript: <FaCode className="text-2xl text-blue-700 dark:text-blue-300" aria-hidden="true" />,
+    React: <FaReact className="text-2xl text-cyan-600 dark:text-cyan-400" aria-hidden="true" />,
+  };
+  const icon = iconMap[language] || <FaCode className="text-2xl text-gray-600 dark:text-gray-400" aria-hidden="true" />;
+
+  // ===== ESTILOS ORIGINAIS (mantidos) =====
   const iconColor = isDark ? 'text-dark-primary' : 'text-secondary';
   const cardBg = isDark ? 'bg-dark-card' : 'bg-white';
   const cardBorder = isDark ? 'border-dark-border' : 'border-card-border';
@@ -41,24 +44,17 @@ export function ProjectCard({ name, description, language, html_url, homepage, c
     : 'bg-secondary group-hover:bg-primary';
   const textMuted = isDark ? 'text-dark-text-muted' : 'text-[#7a4a3a]';
 
-  // Mapeamento de ícones por linguagem
-  const iconMap = {
-    HTML: <FaHtml5 className={`text-2xl ${iconColor}`} />,
-    CSS: <FaCss3Alt className={`text-2xl ${iconColor}`} />,
-    JavaScript: <FaJs className={`text-2xl ${iconColor}`} />,
-    TypeScript: <FaCode className={`text-2xl ${iconColor}`} />,
-    React: <FaReact className={`text-2xl ${iconColor}`} />,
-  };
-  const icon = iconMap[language] || <FaCode className={`text-2xl ${iconColor}`} />;
-
   return (
     <a
       href={homepage || html_url}
       target="_blank"
       rel="noopener noreferrer"
+      aria-label={`${name} – ${isExternal ? 'Visitar site' : 'Ver no GitHub'} (abre em nova aba)`}
       className={`group ${cardBg} rounded-2xl p-6 ${shadow} 
                  border ${cardBorder} transition-all duration-300 
-                 hover:-translate-y-1.5 ${hoverBorder} flex flex-col gap-2` }
+                 hover:-translate-y-1.5 ${hoverBorder} flex flex-col gap-2
+                 focus:outline-none focus:ring-2 focus:ring-offset-2 
+                 ${isDark ? 'focus:ring-dark-secondary focus:ring-offset-dark-card' : 'focus:ring-secondary focus:ring-offset-white'}`}
     >
       {/* Cabeçalho: ícone + linguagem */}
       <div className={`flex justify-between items-center text-sm ${textMuted}`}>
@@ -79,11 +75,14 @@ export function ProjectCard({ name, description, language, html_url, homepage, c
       {/* Rodapé: link + botão */}
       <div className={`flex justify-between items-center text-sm ${footerColor} border-t ${footerBorder} pt-3 mt-1 transition-colors duration-300`}>
         <span className="flex items-center gap-1.5">
-          {isExternal ? <FaGlobe className="text-sm" /> : <FaGithub className="text-sm" />}
+          {isExternal ? <FaGlobe aria-hidden="true" className="text-sm" /> : <FaGithub aria-hidden="true" className="text-sm" />}
           {isExternal ? 'Visitar site' : 'Ver no GitHub'}
         </span>
-        <span className={`${btnBg} text-white w-7 h-7 rounded-full flex items-center justify-center transition-colors duration-300`}>
-          <i className="fas fa-arrow-right text-xs"></i>
+        <span 
+          className={`${btnBg} text-white w-7 h-7 rounded-full flex items-center justify-center transition-colors duration-300 group-focus:ring-2 group-focus:ring-offset-2 ${isDark ? 'focus:ring-dark-secondary focus:ring-offset-dark-card' : 'focus:ring-secondary focus:ring-offset-white'}`}
+          aria-hidden="true"
+        >
+          <FaArrowRight className="text-xs" />
         </span>
       </div>
     </a>
